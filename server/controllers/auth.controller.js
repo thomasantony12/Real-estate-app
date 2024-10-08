@@ -29,52 +29,54 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
-  try{
+  try {
     const user = await db.query("SELECT * FROM users WHERE uname = $1", [
       username,
     ]);
-    
+
     // CHECK THE USER IS EXISTING
-    
-    if (!user)  return res.status(500).json({ message: "Invalid cridentials!" });
+
+    if (!user) return res.status(500).json({ message: "Invalid cridentials!" });
 
     // CHECK THE PASSWORD IS MATCHING WITH THE USERNAME
 
-    if (! await bcrypt.compare(password, user.rows[0].password)) return res.status(500).json({ message: "Invalid cridentials!" });
-  
+    if (!(await bcrypt.compare(password, user.rows[0].password)))
+      return res.status(500).json({ message: "Invalid cridentials!" });
 
     // GENERATE A COOKIE TOKEN AND GIVE IT TO USER
 
-    const {password:userPassword, ...userInfo} = user.rows[0];
+    const { password: userPassword, ...userInfo } = user.rows[0];
     // console.log(user);
     // console.log(userInfo);
     // console.log(userPassword);
 
     const age = 1000 * 60 * 60 * 24 * 7;
 
-    const token = jwt.sign({
-      id : user.rows[0].id
-    }, process.env.JWT_KEY, {
-      expiresIn: age
-    });
+    const token = jwt.sign(
+      {
+        id: user.rows[0].id,
+        isAdmin: true,
+      },
+      process.env.JWT_KEY,
+      {
+        expiresIn: age,
+      }
+    );
 
-    res.cookie("Token", token, {
-      httpOnly: true,
-      // secure: true,
-      maxAge : age
-    }).status(200).json(userInfo);
-
-
-  }catch (err){
-
-
+    res
+      .cookie("Token", token, {
+        httpOnly: true,
+        // secure: true,
+        maxAge: age,
+      })
+      .status(200)
+      .json(userInfo);
+  } catch (err) {
     console.log(err);
-    res.status(500).json( { message : "failed to login!"});
-
-
+    res.status(500).json({ message: "failed to login!" });
   }
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("Token").status(200).json({ message : "Logout successful"});
+  res.clearCookie("Token").status(200).json({ message: "Logout successful" });
 };
