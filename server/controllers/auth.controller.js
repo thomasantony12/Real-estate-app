@@ -18,10 +18,10 @@ export const register = async (req, res) => {
       "INSERT INTO users (email, uname, password, avatar) VALUES ($1, $2, $3, $4)",
       [email, username, hashedPassword, avatar]
     );
-    res.status(201).json({ message: "user added succesfully" });
+    res.status(201).json({ message: "User added succesfully" });
     // console.log(avatar);
   } catch (err) {
-    res.status(500).json({ message: "faild to create user" });
+    res.status(500).json({ message: "Failed to create user!" });
     // console.log("already exist", err);
   }
 };
@@ -45,6 +45,11 @@ export const login = async (req, res) => {
 
     // GENERATE A COOKIE TOKEN AND GIVE IT TO USER
 
+    const {password:userPassword, ...userInfo} = user.rows[0];
+    // console.log(user);
+    // console.log(userInfo);
+    // console.log(userPassword);
+
     const age = 1000 * 60 * 60 * 24 * 7;
 
     const token = jwt.sign({
@@ -57,7 +62,7 @@ export const login = async (req, res) => {
       httpOnly: true,
       // secure: true,
       maxAge : age
-    }).status(200).json({ message : "Login successful"})
+    }).status(200).json(userInfo);
 
 
   }catch (err){

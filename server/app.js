@@ -11,13 +11,11 @@ dotenv.config();
 const port = process.env.PORT;
 const app = express();
 const corsOptions = {
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
+    origin: "http://localhost:5173",
+    credentials:true,
   };
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/auth", authRouter);
