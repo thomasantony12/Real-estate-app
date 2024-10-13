@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
 import apiRequest from "../../lib/apiRequest";
@@ -29,7 +29,9 @@ async function handleLogout() {
         <div className="wrapper">
           <div className="title">
             <h1>User Information</h1>
+            <Link to="/profile/profileUpdatePage">
             <button>Update Profile</button>
+            </Link>
           </div>
           <div className="info">
             <span>
