@@ -2,8 +2,11 @@ import { useState } from "react";
 import "./newPostPage.scss";
 import apiRequest from "../../lib/apiRequest";
 import { useNavigate } from "react-router-dom";
+import ReactQuill from "quill";
+import "quill/dist/quill.snow.css";
 
 function NewPostPage() {
+  const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -81,6 +84,7 @@ function NewPostPage() {
             </div>
             <div className="item description">
               <label htmlFor="description">Description</label>
+            <ReactQuill them="snow" onChange={setValue} value={value} />
               <input id="description" name="description" type="textarea" />
             </div>
             <div className="item">
