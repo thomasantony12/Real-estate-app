@@ -1,12 +1,72 @@
+import { useState } from "react";
 import "./newPostPage.scss";
+import apiRequest from "../../lib/apiRequest";
+import { useNavigate } from "react-router-dom";
 
 function NewPostPage() {
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  async function submitHandler(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const {
+      title,
+      price,
+      address,
+      description,
+      city,
+      bedroom,
+      bathroom,
+      latitude,
+      longitude,
+      type,
+      property,
+      utilities,
+      pet,
+      income,
+      size,
+      school,
+      bus,
+      restaurant,
+    } = Object.fromEntries(formData);
+
+    try{
+      const res = await apiRequest.post(`/posts`, {title,
+        price,
+        address,
+        description,
+        city,
+        bedroom,
+        bathroom,
+        latitude,
+        longitude,
+        type,
+        property,
+        utilities,
+        pet,
+        income,
+        size,
+        school,
+        bus,
+        restaurant,});
+        // console.log(res);
+      // updateUser(res.data)
+      setError("");
+      navigate("/profile");
+
+
+    }catch(err){
+      console.log(err);
+      setError(err.response.data.message);
+    }
+  }
   return (
     <div className="newPostPage">
       <div className="formContainer">
         <h1>Add New Post</h1>
         <div className="wrapper">
-          <form>
+          <form onSubmit={submitHandler}>
             <div className="item">
               <label htmlFor="title">Title</label>
               <input id="title" name="title" type="text" />
@@ -20,7 +80,8 @@ function NewPostPage() {
               <input id="address" name="address" type="text" />
             </div>
             <div className="item description">
-              <label htmlFor="desc">Description</label>
+              <label htmlFor="description">Description</label>
+              <input id="description" name="description" type="textarea" />
             </div>
             <div className="item">
               <label htmlFor="city">City</label>
@@ -52,7 +113,7 @@ function NewPostPage() {
               </select>
             </div>
             <div className="item">
-              <label htmlFor="type">Property</label>
+              <label htmlFor="property">Property</label>
               <select name="property">
                 <option value="apartment">Apartment</option>
                 <option value="house">House</option>
@@ -101,6 +162,7 @@ function NewPostPage() {
               <input min={0} id="restaurant" name="restaurant" type="number" />
             </div>
             <button className="sendButton">Add</button>
+            {error && <span>{error}</span>}
           </form>
         </div>
       </div>
