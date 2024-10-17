@@ -1,8 +1,8 @@
 import "./singlePage.scss";
 import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";
-import { singlePostData, userData } from "../../lib/dummydata";
 import { useLoaderData } from "react-router-dom";
+import DOMpurify from "dompurify";
 
 function SinglePage() {
   const posts = useLoaderData();
@@ -27,7 +27,7 @@ function SinglePage() {
                 <span>{posts.uname || "Not Specified"}</span>
               </div>
             </div>
-            <div className="bottom">{posts.description || "Not Specified"}</div>
+            <div className="bottom" dangerouslySetInnerHTML={ {__html: DOMpurify.sanitize(posts.description)}}></div>
           </div>
         </div>
       </div>
@@ -39,14 +39,20 @@ function SinglePage() {
               <img src="/utility.png" alt="" />
               <div className="featureText">
                 <span>Utilities</span>
-                <p>{posts.utilities || "Not Specified"}</p>
+                {posts.utilities === "owner" ? 
+                  (<p>Owner is responsible</p> ) :
+                  (<p>Tenant is responsible</p>)
+              }
               </div>
             </div>
             <div className="feature">
               <img src="/pet.png" alt="" />
               <div className="featureText">
                 <span>Pet Policy</span>
-                <p>{posts.pet || "Not Specified"}</p>
+                { posts.pet === "allowed" ? 
+                ( <p> Allowed </p> ) 
+                : ( <p> Not allowed </p> ) }
+               
               </div>
             </div>
             <div className="feature">
@@ -78,21 +84,21 @@ function SinglePage() {
               <img src="/school.png" alt="" />
               <div className="featureText">
                 <span>School</span>
-                <p>{posts.school || "Not Specified"}m away</p>
+                <p>{posts.school || "Not Specified"} km away</p>
               </div>
             </div>
             <div className="feature">
               <img src="/pet.png" alt="" />
               <div className="featureText">
                 <span>Bus Stop</span>
-                <p>{posts.bus || "Not Specified"}m away</p>
+                <p>{posts.bus || "Not Specified"} km away</p>
               </div>
             </div>
             <div className="feature">
               <img src="/fee.png" alt="" />
               <div className="featureText">
                 <span>Restaurant</span>
-                <p>{posts.restaurant || "Not Specified"}m away</p>
+                <p>{posts.restaurant || "Not Specified"} km away</p>
               </div>
             </div>
           </div>
