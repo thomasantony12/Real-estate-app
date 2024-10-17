@@ -1,12 +1,13 @@
 import { useState } from "react";
 import "./searchBar.scss";
+import { Link } from "react-router-dom";
 
 const types = ["buy", "rent"];
 
 function SearchBar() {
   const [query, setQuery] = useState({
     type: "buy",
-    location: "",
+    city: "",
     minPrice: 0,
     maxPrice: 0,
   });
@@ -14,6 +15,10 @@ function SearchBar() {
   const switchType = (val) => {
     setQuery((prev) => ({ ...prev, type: val }));
   };
+
+  const changeHandler = (e) => {
+    setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
 
   return (
     <div className="searchBar">
@@ -29,13 +34,14 @@ function SearchBar() {
         ))}
       </div>
       <form>
-        <input type="text" name="location" placeholder="City Location" />
+        <input type="text" name="city" placeholder="City" onChange={changeHandler} />
         <input
           type="number"
           name="minPrice"
           min={0}
           max={10000000}
           placeholder="Min Price"
+          onChange={changeHandler}
         />
         <input
           type="number"
@@ -43,10 +49,13 @@ function SearchBar() {
           min={0}
           max={10000000}
           placeholder="Max Price"
+          onChange={changeHandler}
         />
+        <Link to={`/list?city=${query.city}&type=${query.type}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}`}>
         <button>
           <img src="/search.png" alt="" />
         </button>
+        </Link>
       </form>
     </div>
   );
