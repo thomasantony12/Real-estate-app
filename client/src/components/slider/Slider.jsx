@@ -28,7 +28,7 @@ function Slider({ images }) {
             <img src="/arrow.png" alt="" />
           </div>
           <div className="imgContainer">
-            <img src={images[imageIndex]} alt="" />
+            <img src={images[imageIndex].image} alt="" />
           </div>
           <div className="arrow" onClick={() => changeSlide("right")}>
             <img src="/arrow.png" className="right" alt="" />
@@ -39,12 +39,12 @@ function Slider({ images }) {
         </div>
       )}
       <div className="bigImage">
-        <img src={images[0]} alt="" onClick={() => setImageIndex(0)} />
+        <img src={images[0].image} alt="" onClick={() => setImageIndex(0)} />
       </div>
       <div className="smallImages">
         {images.slice(1).map((image, index) => (
           <img
-            src={image}
+            src={image.image}
             alt=""
             key={index}
             onClick={() => setImageIndex(index + 1)}

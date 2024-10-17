@@ -2,29 +2,32 @@ import "./singlePage.scss";
 import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";
 import { singlePostData, userData } from "../../lib/dummydata";
+import { useLoaderData } from "react-router-dom";
 
 function SinglePage() {
+  const posts = useLoaderData();
+  console.log(posts);
   return (
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
-          <Slider images={singlePostData.images} />
+          <Slider images={posts.images || "./noavatar.jpg"} />
           <div className="info">
             <div className="top">
               <div className="post">
-                <h1>{singlePostData.title}</h1>
+                <h1>{posts.title || "Not Specified"}</h1>
                 <div className="address">
                   <img src="/pin.png" alt="" />
-                  <span>{singlePostData.address}</span>
+                  <span>{posts.address || "Not Specified"}</span>
                 </div>
-                <div className="price">$ {singlePostData.price}</div>
+                <div className="price">$ {posts.price || "Not Specified"}</div>
               </div>
               <div className="user">
-                <img src={userData.img} alt="" />
-                <span>{userData.name}</span>
+                <img src={posts.avatar || "Not Specified"} alt="" />
+                <span>{posts.uname || "Not Specified"}</span>
               </div>
             </div>
-            <div className="bottom">{singlePostData.description}</div>
+            <div className="bottom">{posts.description || "Not Specified"}</div>
           </div>
         </div>
       </div>
@@ -36,21 +39,21 @@ function SinglePage() {
               <img src="/utility.png" alt="" />
               <div className="featureText">
                 <span>Utilities</span>
-                <p>Renter is responsible</p>
+                <p>{posts.utilities || "Not Specified"}</p>
               </div>
             </div>
             <div className="feature">
               <img src="/pet.png" alt="" />
               <div className="featureText">
                 <span>Pet Policy</span>
-                <p>Pets Allowed</p>
+                <p>{posts.pet || "Not Specified"}</p>
               </div>
             </div>
             <div className="feature">
               <img src="/fee.png" alt="" />
               <div className="featureText">
                 <span>Property Fees</span>
-                <p>Must have 3x the rent in total household income</p>
+                <p>{posts.income || "Not Specified"}</p>
               </div>
             </div>
           </div>
@@ -58,15 +61,15 @@ function SinglePage() {
           <div className="sizes">
             <div className="size">
               <img src="/size.png" alt="" />
-              <span>80 sqft</span>
+              <span>{posts.size || "Not Specified"} sqft</span>
             </div>
             <div className="size">
               <img src="/bed.png" alt="" />
-              <span>2 beds</span>
+              <span>{posts.bedroom || "Not Specified"} beds</span>
             </div>
             <div className="size">
               <img src="/bath.png" alt="" />
-              <span>1 bathroom</span>
+              <span>{posts.bathroom || "Not Specified"} bathroom</span>
             </div>
           </div>
           <p className="title">Nearby Places</p>
@@ -75,27 +78,27 @@ function SinglePage() {
               <img src="/school.png" alt="" />
               <div className="featureText">
                 <span>School</span>
-                <p>250m away</p>
+                <p>{posts.school || "Not Specified"}m away</p>
               </div>
             </div>
             <div className="feature">
               <img src="/pet.png" alt="" />
               <div className="featureText">
                 <span>Bus Stop</span>
-                <p>100m away</p>
+                <p>{posts.bus || "Not Specified"}m away</p>
               </div>
             </div>
             <div className="feature">
               <img src="/fee.png" alt="" />
               <div className="featureText">
                 <span>Restaurant</span>
-                <p>200m away</p>
+                <p>{posts.restaurant || "Not Specified"}m away</p>
               </div>
             </div>
           </div>
           <p className="title">Location</p>
           <div className="mapContainer">
-            <Map items={[singlePostData]} />
+            <Map items={[posts]} />
           </div>
           <div className="buttons">
             <button>

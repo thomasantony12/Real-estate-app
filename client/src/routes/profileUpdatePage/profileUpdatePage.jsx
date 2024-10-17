@@ -12,7 +12,7 @@ function ProfileUpdatePage() {
 
   console.log(currentUser.avatar);
   const [error, setError] = useState("");
-  const [avatar, setAvatar] = useState(currentUser.avatar);
+  const [avatar, setAvatar] = useState([]);
   const navigate = useNavigate();
 
   async function submitHandler(e) {
@@ -22,7 +22,7 @@ function ProfileUpdatePage() {
     const {username, email, password} = Object.fromEntries(formData);
 
     try{
-      const res = await apiRequest.put(`/users/${currentUser.id}`, {username , email, password, avatar});
+      const res = await apiRequest.put(`/users/${currentUser.id}`, {username , email, password, avatar: avatar[0]});
       updateUser(res.data)
       setError("");
       navigate("/profile");
@@ -64,14 +64,15 @@ function ProfileUpdatePage() {
         </form>
       </div>
       <div className="sideContainer">
-        <img src={avatar || "noavatar.jpg"} alt="" className="avatar" />
+            <label htmlFor="password">Change profile picture</label>
+        <img src={avatar[0] || currentUser.avatar || "noavatar.jpg"} alt="" className="avatar" />
         <UploadWidget uwConfig={{
           cloudName : "thomas2001",
           uploadPreset:"estate",
           multiple:false,
           maxImageFileSize:2000000,
           folder:"avatars"
-        }} setAvatar={setAvatar}/>
+        }} setState={setAvatar}/>
       </div>
     </div>
   );

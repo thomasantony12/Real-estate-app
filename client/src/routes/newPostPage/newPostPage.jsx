@@ -2,12 +2,14 @@ import { useState } from "react";
 import "./newPostPage.scss";
 import apiRequest from "../../lib/apiRequest";
 import { useNavigate } from "react-router-dom";
-import ReactQuill from "quill";
-import "quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import UploadWidget from "../../components/uploadWidget/UploadWidget.jsx"
 
 function NewPostPage() {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+  const [images, setImages] = useState([]);
   const navigate = useNavigate();
 
   async function submitHandler(e) {
@@ -17,7 +19,6 @@ function NewPostPage() {
       title,
       price,
       address,
-      description,
       city,
       bedroom,
       bathroom,
@@ -38,7 +39,7 @@ function NewPostPage() {
       const res = await apiRequest.post(`/posts`, {title,
         price,
         address,
-        description,
+        description : value,
         city,
         bedroom,
         bathroom,
@@ -52,11 +53,13 @@ function NewPostPage() {
         size,
         school,
         bus,
-        restaurant,});
+        restaurant,
+      images: images});
         // console.log(res);
       // updateUser(res.data)
       setError("");
-      navigate("/profile");
+      console.log(res);
+      navigate("/"+res.data.postid);
 
 
     }catch(err){
@@ -85,7 +88,6 @@ function NewPostPage() {
             <div className="item description">
               <label htmlFor="description">Description</label>
             <ReactQuill them="snow" onChange={setValue} value={value} />
-              <input id="description" name="description" type="textarea" />
             </div>
             <div className="item">
               <label htmlFor="city">City</label>
@@ -170,7 +172,16 @@ function NewPostPage() {
           </form>
         </div>
       </div>
-      <div className="sideContainer"></div>
+      <div className="sideContainer">
+        <label htmlFor="restaurant">Upload Images</label>
+        {images.map( (item, index) => <img src={item} key={index} className="avatar"/>)}
+        <UploadWidget uwConfig={{
+          multiple : true,
+          folder : "images",
+          cloudName : "thomas2001",
+          uploadPreset:"estate",
+        }} setState={setImages}/>
+      </div>
     </div>
   );
 }
