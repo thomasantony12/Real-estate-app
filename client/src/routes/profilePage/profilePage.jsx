@@ -9,6 +9,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 function ProfilePage() {
   const data = useLoaderData();
+  console.log(data);
 
   const navigate = useNavigate();
   const {currentUser, updateUser} = useContext(AuthContext);
@@ -56,7 +57,7 @@ async function handleLogout() {
             <button>Create New Post</button>
             </Link>
           </div>
-          <List data={data}/>
+          {/* <List data={data}/> */}
           <div className="title">
             <h1>Saved List</h1>
           </div>

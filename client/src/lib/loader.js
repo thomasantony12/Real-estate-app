@@ -9,6 +9,7 @@ return res.data;
 export const listPageLoader = ({request, params}) => {
 const query = request.url.split("?")[1];
 const resPromise = apiRequest("/posts?"+query);
+console.log(resPromise);
 return defer({
     postResponse: resPromise,
   });
