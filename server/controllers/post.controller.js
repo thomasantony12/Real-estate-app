@@ -165,3 +165,21 @@ export const deletePost = async (req, res) => {
     res.status(400).json({ message: "Cannot delete post!" });
   }
 };
+
+export const savePost = async (req, res) => {
+  const uid = req.userId;
+  const postId = req.postId;
+  
+  try {
+    const result = await db.query("SELECT * FROM savedposts WHERE userid = $1 AND postid = $2",[uid, postId]);
+    if (!result.rows) {
+      await db.query("INSERT INTO savedposts (userid, postid) VALUES ($1, $2)",[uid, postId]);
+    }else{
+      await db.query("DELETE FROM savedposts WHERE userid = $1 AND postid = $2)",[uid, postId]);
+    }
+    res.status(200).json({ message: "Post Deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "Cannot delete post!" });
+  }
+};

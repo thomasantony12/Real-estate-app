@@ -6,24 +6,22 @@ import "./profilePage.scss";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
-
 function ProfilePage() {
   const data = useLoaderData();
-  console.log(data);
+  // console.log(data.postResponse.data);
 
   const navigate = useNavigate();
-  const {currentUser, updateUser} = useContext(AuthContext);
-  
+  const { currentUser, updateUser } = useContext(AuthContext);
 
-async function handleLogout() {
-  try{
-    await apiRequest.post("/auth/logout");
-    updateUser(null);
-    navigate("/");
-  }catch(err){
-    console.log(err);
+  async function handleLogout() {
+    try {
+      await apiRequest.post("/auth/logout");
+      updateUser(null);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   }
-}
 
   return (
     <div className="profilePage">
@@ -32,16 +30,13 @@ async function handleLogout() {
           <div className="title">
             <h1>User Information</h1>
             <Link to="/profile/profileUpdatePage">
-            <button>Update Profile</button>
+              <button>Update Profile</button>
             </Link>
           </div>
           <div className="info">
             <span>
               Avatar:
-              <img
-                src={currentUser.avatar || "noavatar.jpg"}
-                alt=""
-              />
+              <img src={currentUser.avatar || "noavatar.jpg"} alt="" />
             </span>
             <span>
               Username: <b>{currentUser.uname}</b>
@@ -54,10 +49,10 @@ async function handleLogout() {
           <div className="title">
             <h1>My List</h1>
             <Link to="/profile/newPostPage">
-            <button>Create New Post</button>
+              <button>Create New Post</button>
             </Link>
           </div>
-          {/* <List data={data}/> */}
+          <List data={data.postResponse.data}/>
           <div className="title">
             <h1>Saved List</h1>
           </div>
@@ -66,7 +61,7 @@ async function handleLogout() {
       </div>
       <div className="chatContainer">
         <div className="wrapper">
-          <Chat/>
+          <Chat />
         </div>
       </div>
     </div>
