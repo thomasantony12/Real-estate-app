@@ -4,8 +4,7 @@ import {
   deletePost,
   editPost,
   getPost,
-  getPosts,
-  savePost,
+  getPosts
 } from "../controllers/post.controller.js";
 import { verifyToken } from "../middlewere/verifyToken.js";
 
@@ -16,6 +15,5 @@ router.get("/:id", getPost);
 router.post("/", verifyToken, addPost);
 router.put("/:id", verifyToken, editPost);
 router.delete("/:id", verifyToken, deletePost);
-router.post("/savePost", verifyToken, savePost);
 
 export default router;
