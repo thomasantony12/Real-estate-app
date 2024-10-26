@@ -1,4 +1,5 @@
 import db from "../db.js";
+import jwt from "jsonwebtoken";
 
 export const getPosts = async (req, res) => {
   const query = req.query;
@@ -28,7 +29,6 @@ export const getPosts = async (req, res) => {
         item.images = images.rows[0];
       })
     );
-    console.log(response.rows);
     res.status(200).json(response.rows);
   } catch (err) {
     console.log(err);
@@ -52,11 +52,25 @@ export const getPost = async (req, res) => {
       delete element.email;
     });
 
-    const data = { ...response.rows[0], images: images.rows };
-    res.status(200).json(data);
+    const token = req.cookies.Token;
+    
+    if(token){
+      jwt.verify(token, process.env.JWT_KEY, async( err, payload) => {
+        if(!err){
+          const saved = await db.query("SELECT * FROM savedposts WHERE userid = $1 AND postid = $2",[payload.id, postId]);
+          const data = { ...response.rows[0], images: images.rows, isSaved: !saved.rows[0] ? false : true };
+          return res.status(200).json(data);
+        }
+      })
+    } else {
+      const data = { ...response.rows[0], images: images.rows, isSaved: false };
+      console.log("hi");
+      return res.status(200).json(data);
+    }
+    
   } catch (err) {
     console.log(err);
-    res.status(400).json({ message: "Post not available!" });
+    res.status(400).json({ message: "Failed to get post!" });
   }
 };
 
@@ -159,24 +173,6 @@ export const deletePost = async (req, res) => {
     await db.query("DELETE FROM posts WHERE id = $1", [postId]);
     await db.query("DELETE FROM postdetails WHERE postid = $1", [postId]);
     await db.query("DELETE FROM postimages WHERE postid = $1", [postId]);
-    res.status(200).json({ message: "Post Deleted" });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: "Cannot delete post!" });
-  }
-};
-
-export const savePost = async (req, res) => {
-  const uid = req.userId;
-  const postId = req.postId;
-  
-  try {
-    const result = await db.query("SELECT * FROM savedposts WHERE userid = $1 AND postid = $2",[uid, postId]);
-    if (!result.rows) {
-      await db.query("INSERT INTO savedposts (userid, postid) VALUES ($1, $2)",[uid, postId]);
-    }else{
-      await db.query("DELETE FROM savedposts WHERE userid = $1 AND postid = $2)",[uid, postId]);
-    }
     res.status(200).json({ message: "Post Deleted" });
   } catch (err) {
     console.log(err);

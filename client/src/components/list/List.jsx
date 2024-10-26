@@ -2,6 +2,7 @@ import './list.scss'
 import Card from"../card/Card"
 
 function List(props){
+  // console.log(props);
   return (
     <div className='list'>
       {props.data.map(item=>(

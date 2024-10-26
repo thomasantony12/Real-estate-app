@@ -14,3 +14,11 @@ return defer({
     postResponse: resPromise,
   });
 }
+
+export const profilePageLoader = async () => {
+const resPromise = await apiRequest("/users/profilePosts");
+// console.log(resPromise);
+return defer({
+    postResponse: resPromise,
+  });
+}
