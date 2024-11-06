@@ -8,6 +8,8 @@ import authRouter from "./routes/auth.route.js";
 import testRouter from "./routes/test.route.js";
 import userRouter from "./routes/user.route.js";
 import postRouter from "./routes/post.route.js";
+import chatRouter from "./routes/chat.route.js";
+import messageRouter from "./routes/message.route.js";
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use("/auth", authRouter);
 app.use("/test", testRouter);
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
+app.use("/chats", chatRouter);
+app.use("/messages", messageRouter);
 
 app.listen(port, () => {
     console.log(`Server is running at port http://localhost:${port}`);
