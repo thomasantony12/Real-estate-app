@@ -5,6 +5,6 @@ import { verifyToken } from "../middlewere/verifyToken.js";
 const router = express.Router();
 
 
-router.post("/", verifyToken, addMessage);
+router.post("/:id", verifyToken, addMessage);
 
 export default router;
