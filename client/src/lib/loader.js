@@ -17,8 +17,10 @@ return defer({
 
 export const profilePageLoader = async () => {
 const resPromise = await apiRequest("/users/profilePosts");
-// console.log(resPromise);
+const chatPromise = await apiRequest("/chats/");
+console.log(chatPromise);
 return defer({
-    postResponse: resPromise,
-  });
+  postResponse: resPromise,
+  chatResponse: chatPromise,
+});
 }

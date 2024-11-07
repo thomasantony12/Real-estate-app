@@ -6,7 +6,21 @@ export const getChats = async (req, res) => {
     const result = await db.query("SELECT * FROM chat WHERE userid = $1", [
       tokenUserId,
     ]);
+
+    await Promise.all(
+     result.rows.map(async (element) => {
+      const userDetail = await db.query("SELECT * FROM users WHERE id = $1", [
+        element.tousersid
+      ]);
+      delete userDetail.rows[0].password;
+      delete userDetail.rows[0].email;
+      Object.assign(element, userDetail.rows[0]);
+     })
+    );
+
     console.log(result.rows);
+    res.status(200).json(result.rows);
+
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Chats cannot get!" });

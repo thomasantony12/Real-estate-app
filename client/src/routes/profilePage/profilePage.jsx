@@ -8,7 +8,6 @@ import { AuthContext } from "../../context/AuthContext";
 
 function ProfilePage() {
   const data = useLoaderData();
-  // console.log(data.postResponse);
 
   const navigate = useNavigate();
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -79,12 +78,18 @@ function ProfilePage() {
               }
             </Await>
           </Suspense>
-          {/* <List data={data.postResponse.data.savedPosts}/> */}
         </div>
       </div>
       <div className="chatContainer">
         <div className="wrapper">
-          <Chat />
+        <Suspense fallback={<p>Loading...</p>}>
+            <Await
+              resolve={data.chatResponse}
+              errorElement={<p>Error loading package location!</p>}
+            >
+              {(chatResponse) => <Chat chats={chatResponse.data}/>}
+            </Await>
+          </Suspense>
         </div>
       </div>
     </div>

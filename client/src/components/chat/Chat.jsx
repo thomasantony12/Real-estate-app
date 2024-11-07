@@ -1,60 +1,25 @@
 import { useState } from "react";
 import "./chat.scss";
 
-function Chat() {
-  const [chat, setChat] = useState(true);
+function Chat({chats}) {
+  const [chat, setChat] = useState(false);
+  console.log(chats);
   return (
     <div className="chat">
       <div className="messages">
         <h1>Messages</h1>
-        <div className="message">
+        {
+        chats?.map(element => { return(
+        <div className="message" key={element.id} style={{ backgroundColor : element.seenby == "true" ? "white" : "#fecd514e"}}>
           <img
-            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src={element.avatar || "/noavatar.jpg"}
             alt=""
           />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet...</p>
+          <span>{element.uname}</span>
+          <p>{element.lastmsg}</p>
         </div>
-        <div className="message">
-          <img
-            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt=""
-          />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet...</p>
-        </div>
-        <div className="message">
-          <img
-            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt=""
-          />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet...</p>
-        </div>
-        <div className="message">
-          <img
-            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt=""
-          />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet...</p>
-        </div>
-        <div className="message">
-          <img
-            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt=""
-          />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet...</p>
-        </div>
-        <div className="message">
-          <img
-            src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt=""
-          />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet...</p>
-        </div>
+        )})
+        }
       </div>
       {chat && (
         <div className="chatBox">
