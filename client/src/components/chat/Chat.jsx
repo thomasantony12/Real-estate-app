@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./chat.scss";
 import apiRequest from "../../lib/apiRequest";
 import { format } from "timeago.js";
+import { SocketContext } from "../../context/SocketContext";
 
 function Chat({ chats }) {
   const [chat, setChat] = useState(null);
+  const { socket } = useContext(SocketContext);
   // console.log(chats);
   const openChat = async (id, avatar, name) => {
     try {
