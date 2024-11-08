@@ -5,9 +5,10 @@ import { format } from "timeago.js";
 
 function Chat({ chats }) {
   const [chat, setChat] = useState(null);
-  console.log(chats);
+  // console.log(chats);
   const openChat = async (id, avatar, name) => {
     try {
+      console.log(id);
       const res = await apiRequest("/chats/" + id);
       // console.log(res.data);
       setChat({ message: res.data, user: { avatar, name }, chat: { id } });

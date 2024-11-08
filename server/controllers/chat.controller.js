@@ -37,6 +37,8 @@ export const getChat = async (req, res) => {
     await db.query("UPDATE chat SET seenby = $1 WHERE id = $2 RETURNING *", [true, chatId]);
     const chats = await db.query("SELECT tousersid FROM chat WHERE id = $1",[chatId]);
     const toUserChatId = await db.query("SELECT id FROM chat WHERE userid = $1 AND tousersid = $2",[chats.rows[0].tousersid, tokenUserId])
+    // console.log(toUserChatId.rows[0].id);
+    // console.log(chatId);
 
     const result = await db.query(
       "SELECT * FROM msg WHERE chatid IN ($1, $2) ORDER BY createdat",
@@ -55,8 +57,12 @@ export const addChat = async (req, res) => {
   const tokenUserId = req.userId;
   const touserid = req.body.receiverid;
   try {
+    await db.query(
+      "INSERT INTO chat (userid, tousersid, seenby) VALUES ($1, $2, $3) RETURNING *",
+      [ touserid, tokenUserId, false]
+    );
     const result = await db.query(
-      "INSERT INTO chat (userid, tousersid, seenby) VALUES ($1, $2, *3) RETURNING *",
+      "INSERT INTO chat (userid, tousersid, seenby) VALUES ($1, $2, $3) RETURNING *",
       [tokenUserId, touserid, false]
     );
     // console.log(result.rows);
