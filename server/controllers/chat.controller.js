@@ -6,6 +6,7 @@ export const getChats = async (req, res) => {
     const result = await db.query("SELECT * FROM chat WHERE userid = $1", [
       tokenUserId,
     ]);
+    // console.log(result.rows);
 
     await Promise.all(
      result.rows.map(async (element) => {
@@ -14,11 +15,12 @@ export const getChats = async (req, res) => {
       ]);
       delete userDetail.rows[0].password;
       delete userDetail.rows[0].email;
+      delete userDetail.rows[0].id;
       Object.assign(element, userDetail.rows[0]);
      })
     );
 
-    console.log(result.rows);
+    // console.log(result.rows);
     res.status(200).json(result.rows);
 
   } catch (err) {
@@ -29,13 +31,18 @@ export const getChats = async (req, res) => {
 
 export const getChat = async (req, res) => {
   const tokenUserId = req.userId;
-  const toUserId = req.url.slice(1);
+  const chatId = req.url.slice(1);
+
   try {
+    await db.query("UPDATE chat SET seenby = $1 WHERE id = $2 RETURNING *", [true, chatId]);
+    const chats = await db.query("SELECT tousersid FROM chat WHERE id = $1",[chatId]);
+    const toUserChatId = await db.query("SELECT id FROM chat WHERE userid = $1 AND tousersid = $2",[chats.rows[0].tousersid, tokenUserId])
+
     const result = await db.query(
-      "SELECT * FROM msg WHERE chatid IN ( SELECT id FROM chat WHERE (userid = $1 AND tousersid = $2) OR (userid = $3 AND tousersid = $4))",
-      [tokenUserId, toUserId,  toUserId, tokenUserId]
+      "SELECT * FROM msg WHERE chatid IN ($1, $2) ORDER BY createdat",
+      [chatId, toUserChatId.rows[0].id]
     );
-    // console.log(result.rows);
+
     res.status(200).json(result.rows);
 
   } catch (err) {
