@@ -57,6 +57,9 @@ export const addChat = async (req, res) => {
   const tokenUserId = req.userId;
   const touserid = req.body.receiverid;
   try {
+    const chatExist = await db.query("SELECT id FROM chat WHERE userid = $1 AND tousersid = $2",[tokenUserId, touserid])
+    if(chatExist.rows[0]) return res.status(401).json({message : " Chat already exists!"});
+
     await db.query(
       "INSERT INTO chat (userid, tousersid, seenby) VALUES ($1, $2, $3) RETURNING *",
       [ touserid, tokenUserId, false]
