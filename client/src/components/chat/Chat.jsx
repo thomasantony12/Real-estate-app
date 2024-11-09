@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./chat.scss";
 import apiRequest from "../../lib/apiRequest";
 import { format } from "timeago.js";
@@ -7,7 +7,7 @@ import { SocketContext } from "../../context/SocketContext";
 function Chat({ chats }) {
   const [chat, setChat] = useState(null);
   const { socket } = useContext(SocketContext);
-  // console.log(chats);
+  console.log(chat);
   const openChat = async (id, avatar, name) => {
     try {
       console.log(id);
@@ -28,13 +28,41 @@ function Chat({ chats }) {
       const res = await apiRequest.post("/messages/" + chat.chat.id, {
         message: text,
       });
-      setChat((prev) => ({ ...prev, message: [...prev.message, res.data[0]] }));
-      console.log(chat);
+      setChat((prev) => ({ ...prev, message: [...prev.message, res.data.messages[0]] }));
       e.target.reset();
+      // console.log(chat);
+      // console.log(res.data.receiverId);
+      // console.log(res.data.messages[0]);
+      socket.emit("sendMessage", {
+        receiverId: res.data.receiverId,
+        data: res.data.messages[0],
+      });
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const read = async () => {
+      try {
+        await apiRequest.put("/chats/read/" + chat.id);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (chat && socket) {
+      socket.on("getMessage", (data) => {
+        if (chat.id === data.chatId) {
+          setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
+          read();
+        }
+      });
+    }
+    return () => {
+      socket.off("getMessage");
+    };
+  }, [socket, chat]);
 
   return (
     <div className="chat">
@@ -52,10 +80,10 @@ function Chat({ chats }) {
               onClick={() =>
                 openChat(element.id, element.avatar, element.uname)
               }
-            >
+              >
+              {/* {console.log(element.id, chat.chat.id)} */}
               <img src={element.avatar || "./noavatar.jpg"} alt="" />
               <span>{element.uname}</span>
-              {console.log(element.lastmsg)}
               <p>{element.lastmsg}</p>
             </div>
           );

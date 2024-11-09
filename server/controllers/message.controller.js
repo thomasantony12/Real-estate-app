@@ -15,7 +15,7 @@ export const addMessage = async (req, res) => {
       await db.query("UPDATE chat SET lastmsg = $1 WHERE (userid = $2 AND tousersid = $3) OR (userid = $3 AND tousersid = $2) RETURNING *", [message, cUser, toUser] );
       // console.log(up.rows);
 
-      res.status(200).json(result.rows);
+      res.status(200).json({messages : result.rows, receiverId : toUser});
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: "Failed to add message!" });
