@@ -1,48 +1,48 @@
 # Real Estate App
 
-    A simple Real Estate App that connects multiple users, enabling them to browse, interact, and manage posts related to real estate properties. This application provides a seamless experience for managing posts, chatting with other users, and exploring property locations on an interactive map.
+A simple Real Estate App that connects multiple users, enabling them to browse, interact, and manage posts related to real estate properties. This application provides a seamless experience for managing posts, chatting with other users, and exploring property locations on an interactive map.
 
 ## Features
 
-    1. User Management
-        User Registration and Login: Secure authentication system for new and existing users.
-        Update User Details: Edit personal information.
+1. User Management
+    User Registration and Login: Secure authentication system for new and existing users.
+    Update User Details: Edit personal information.
 
-    2. Post Management
-        Create Posts: Add real estate listings with relevant details.
-        Update Posts: Modify existing posts as needed.
-        Delete Posts: Remove posts from the system.
-        Get Posts: Retrieve all posts with detailed information.
+2. Post Management
+    Create Posts: Add real estate listings with relevant details.
+    Update Posts: Modify existing posts as needed.
+    Delete Posts: Remove posts from the system.
+    Get Posts: Retrieve all posts with detailed information.
 
-    3. Interaction and Communication
-        Chat Between Users: Real-time chat functionality to connect users.
-        Save Posts: Mark posts as favorites for easy access later.
+3. Interaction and Communication
+    Chat Between Users: Real-time chat functionality to connect users.
+    Save Posts: Mark posts as favorites for easy access later.
 
-    4. Search and Filter
-        Filter Posts: Narrow down results based on various criteria like price, location, or type.
+4. Search and Filter
+    Filter Posts: Narrow down results based on various criteria like price, location, or type.
 
-    5. Maps and Locations
-        Property Locations: Interactive maps to display property locations using Leaflet.
+5. Maps and Locations
+    Property Locations: Interactive maps to display property locations using Leaflet.
 
 ## Technologies Used
 
 ### Backend
-    Node.js: JavaScript runtime for building the server-side logic.
-    Express.js: Framework for building RESTful APIs.
-    PostgreSQL: Relational database for managing user and post data.
+- Node.js: JavaScript runtime for building the server-side logic.
+- Express.js: Framework for building RESTful APIs.
+- PostgreSQL: Relational database for managing user and post data.
 
 ### Frontend
-    React: Component-based UI library for building dynamic interfaces.
-    SASS: For styling the application with a modular and maintainable CSS structure.
+- React: Component-based UI library for building dynamic interfaces.
+- SASS: For styling the application with a modular and maintainable CSS structure.
 
 ### Real-Time Features
-    Socket.IO: Real-time communication for the chat functionality.
+- Socket.IO: Real-time communication for the chat functionality.
 
 ### Utilities
-    Leaflet: Interactive maps for displaying property locations.
-    Axios: For making HTTP requests to the server.
-    Zustand: Lightweight state management library.
-    timeago.js: Display relative time (e.g., "5 minutes ago") for timestamps.
+- Leaflet: Interactive maps for displaying property locations.
+- Axios: For making HTTP requests to the server.
+- Zustand: Lightweight state management library.
+- timeago.js: Display relative time (e.g., "5 minutes ago") for timestamps.
 
 ## Getting Started
 
@@ -68,8 +68,8 @@ npm install
 
 3. Set up the database:
 
-- Create a PostgreSQL database.
-- Configure the database connection in the .env file.
+    - Create a PostgreSQL database.
+    - Configure the database connection in the .env file.
 
 4. Start the development server:
 
@@ -116,25 +116,25 @@ real-estate-app/
 
 1. User Authentication:
 
-- Users register and log in to access the app.
-- Securely stored credentials with hashed passwords.
+    - Users register and log in to access the app.
+    - Securely stored credentials with hashed passwords.
 
 2. Post Management:
 
-- Users can create, update, delete, and retrieve posts.
-- Posts include property details such as price, location, and description.
+    - Users can create, update, delete, and retrieve posts.
+    - Posts include property details such as price, location, and description.
 
 3. Chat:
 
-- Real-time messaging powered by Socket.IO for smooth user communication.
+    - Real-time messaging powered by Socket.IO for smooth user communication.
 
 4. Maps Integration:
 
-- View property locations on a map with Leaflet.
+    - View property locations on a map with Leaflet.
 
 5. Filter and Search:
 
-- Quickly find properties based on filters like price, location, and type.
+    - Quickly find properties based on filters like price, location, and type.
 
 ## Future Enhancements
 
