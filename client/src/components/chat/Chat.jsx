@@ -1,18 +1,29 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./chat.scss";
 import apiRequest from "../../lib/apiRequest";
 import { format } from "timeago.js";
 import { SocketContext } from "../../context/SocketContext";
+import { useNotificationStore } from "../../lib/notificationStore";
 
 function Chat({ chats }) {
-  const [chat, setChat] = useState(null);
+  const [chat, setChat] = useState();
+  const [state, setState] = useState(0);
   const { socket } = useContext(SocketContext);
-  console.log(chat);
-  const openChat = async (id, avatar, name) => {
+  const messageEndRef = useRef();
+  const decrease = useNotificationStore((state) => state.decrease);
+
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat]);
+
+  const openChat = async (id, avatar, name, seenby) => {
     try {
-      console.log(id);
       const res = await apiRequest("/chats/" + id);
-      // console.log(res.data);
+      if(seenby === "false"){
+        setState(id);
+        decrease();
+      }
       setChat({ message: res.data, user: { avatar, name }, chat: { id } });
     } catch (error) {
       console.log(error);
@@ -26,13 +37,13 @@ function Chat({ chats }) {
     if (!text) return;
     try {
       const res = await apiRequest.post("/messages/" + chat.chat.id, {
-        message: text,
+        message: text, seenby: "false",
       });
-      setChat((prev) => ({ ...prev, message: [...prev.message, res.data.messages[0]] }));
+      setChat((prev) => ({
+        ...prev,
+        message: [...prev.message, res.data.messages[0]],
+      }));
       e.target.reset();
-      // console.log(chat);
-      // console.log(res.data.receiverId);
-      // console.log(res.data.messages[0]);
       socket.emit("sendMessage", {
         receiverId: res.data.receiverId,
         data: res.data.messages[0],
@@ -75,13 +86,14 @@ function Chat({ chats }) {
               key={element.id}
               style={{
                 backgroundColor:
-                  element.seenby == "true" ? "white" : "#fecd514e",
+                  element.seenby === "true" || element.id === state
+                    ? "white"
+                    : "#fecd514e",
               }}
               onClick={() =>
-                openChat(element.id, element.avatar, element.uname)
+                openChat(element.id, element.avatar, element.uname, element.seenby)
               }
-              >
-              {/* {console.log(element.id, chat.chat.id)} */}
+            >
               <img src={element.avatar || "./noavatar.jpg"} alt="" />
               <span>{element.uname}</span>
               <p>{element.lastmsg}</p>
@@ -117,6 +129,7 @@ function Chat({ chats }) {
                 </div>
               );
             })}
+            <div ref={messageEndRef}></div>
           </div>
           <form onSubmit={handleSubmit} className="bottom">
             <textarea name="text"></textarea>

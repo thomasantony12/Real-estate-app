@@ -20,17 +20,21 @@ const removeUser = (socketId) => {
 };
 
 const getUser = (userId) => {
+  // console.log(userId);
+  // console.log(onlineUser);
   return onlineUser.find((user) => user.userId === userId);
 };
 
 io.on("connection", (socket) => {
   socket.on("newUser", (userId) => {
     addUser(userId, socket.id);
-    console.log(onlineUser);
+    // console.log(onlineUser);
   });
 
   socket.on("sendMessage", ({ receiverId, data }) => {
+    // console.log(receiverId, data);
     const receiver = getUser(receiverId);
+    // console.log(receiver);
     io.to(receiver.socketId).emit("getMessage", data);
   });
 

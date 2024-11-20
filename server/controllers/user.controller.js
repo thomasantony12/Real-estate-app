@@ -123,14 +123,15 @@ export const profilePosts = async (req, res) => {
         item.images = images.rows[0];
       })
     );
-
+    
     // SAVED POST RETREVE
-
+    
     const savedPost = await db.query(
       "SELECT * FROM savedposts WHERE userid = $1;",
       [tokenUserId]
     );
     
+    console.log(savedPost.rows);
     await Promise.all(
       savedPost.rows.map(async (item) => {
         const response = await db.query(
@@ -145,7 +146,8 @@ export const profilePosts = async (req, res) => {
       delete element.password;
       delete element.email;
     });
-
+    console.log("aaaaaaaaaa");
+    
     await Promise.all(
       savedPostResponse.map(async (item) => {
         const images = await db.query(
@@ -155,10 +157,21 @@ export const profilePosts = async (req, res) => {
         item.images = images.rows[0];
       })
     );
-
+    
     res.status(200).json({posts: [response.rows], savedPosts: [savedPostResponse]});
   } catch (error) {
     console.log(error);
     res.status(200).json("Failed to get profile!");
   }
 };
+
+export const getNotificationNumber = async (req, res) => {
+  const tokenUserId = req.userId;
+try {
+  const length = await db.query("SELECT count(*) FROM chat WHERE seenby = $1 and userid = $2",[false, tokenUserId]);
+  res.status(200).json(length.rows[0].count);
+} catch (error) {
+  console.log(error);
+}
+
+}
