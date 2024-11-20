@@ -146,7 +146,6 @@ export const profilePosts = async (req, res) => {
       delete element.password;
       delete element.email;
     });
-    console.log("aaaaaaaaaa");
     
     await Promise.all(
       savedPostResponse.map(async (item) => {
