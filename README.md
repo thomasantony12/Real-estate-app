@@ -154,3 +154,10 @@ Contributions are welcome! Please follow these steps:
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Screenshots
+![1](https://github.com/user-attachments/assets/fd7378df-f571-41e0-91ad-e4a1daa1afb7)
+![2](https://github.com/user-attachments/assets/aa58b177-fd26-466f-90dc-422821378bd8)
+![3](https://github.com/user-attachments/assets/b707b118-bcc7-4f38-90a2-b6889afb1f3e)
+
+
